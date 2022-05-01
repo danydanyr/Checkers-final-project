@@ -3,6 +3,7 @@ let selectedCell;
 let pieces = [];
 let currentPiece;
 let anotherPieceCanEat = false;
+let gameOver = false;
 const htmlTable = document.createElement('table');
 const TABLE_SIZE = 8;
 const RED_PLAYER = 'red';
@@ -57,6 +58,11 @@ function onCellClick(e) {
         selectedCell.classList.add('checker-' + currentPiece.color);
         unpaintAllCells();
         selectedCell = undefined;
+        if (isGameOver()) {
+            gameover = true;
+            didIWin();
+            return;
+        }
         passTheTurn();
     }
     else if (e.currentTarget.classList.contains('possibleAfterEat')) {
@@ -79,14 +85,17 @@ function onCellClick(e) {
         selectedCell = undefined;
         if (game.currentTurn === RED_PLAYER) {
             game.blackEaten++;
-            console.log('black eaten '+ game.blackEaten);
+            console.log('black eaten ' + game.blackEaten);
         }
         else {
             game.redEaten++;
-            console.log('red eaten '+ game.redEaten);
+            console.log('red eaten ' + game.redEaten);
         }
-        if (didIWin())
-            return;
+        if (isGameOver()) {
+            gameover = true;
+            if (didIWin())
+                return;
+        }
         passTheTurn();
     }
     else if (selectedCell !== undefined) {
@@ -95,6 +104,7 @@ function onCellClick(e) {
         onCellClick(e);
     }
 }
+
 function unpaintAllCells() {
     for (let i = 0; i < TABLE_SIZE; i++) {
         for (let j = 0; j < TABLE_SIZE; j++) {
@@ -108,8 +118,20 @@ function unpaintAllCells() {
 function passTheTurn() {
     game.currentTurn = game.currentTurn === BLACK_PLAYER ? RED_PLAYER : BLACK_PLAYER;
 }
+function isGameOver() {
+    for (let i = 0; i < TABLE_SIZE; i++) {
+        for (let j = 0; j < TABLE_SIZE; j++) {
+            if (pieces[i][j] !== undefined && pieces[i][j].color !== game.currentTurn) {
+                if (checkPossibleMove(i, j, pieces[i][j].color) || checkPossibleEat(i, j, pieces[i][j].color)) { //checking if at least one of the opponnents pieces can move
+                    return false;
+                }
+            }
+        }
+    }
+    return true;
+}
 function didIWin() {
-    if (game.redEaten === PIECES_AMOUNT || game.blackEaten === PIECES_AMOUNT) {
+    if (game.redEaten === PIECES_AMOUNT || game.blackEaten === PIECES_AMOUNT || gameOver) {
         const winnerPopup = document.createElement('div');
         const winner = game.currentTurn.charAt(0).toUpperCase() + game.currentTurn.slice(1);
         winnerPopup.textContent = winner + ' is the bigger nerd!';

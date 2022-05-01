@@ -22,6 +22,25 @@ function pieceMovement(row, col, color) {
         }
     }
 }
+//checks if at least one of the pieces can move or its game over
+function checkPossibleMove(row, col, color) {
+    if (color === BLACK_PLAYER) {
+        if (isPointInBounds(row + 1, col + 1) && pieces[row + 1][col + 1] === undefined) {
+            return true;
+        }
+        if (isPointInBounds(row + 1, col - 1) && pieces[row + 1][col - 1] === undefined) {
+            return true;       
+         }
+    }
+    else {
+        if (isPointInBounds(row - 1, col + 1) && pieces[row - 1][col + 1] === undefined) {
+            return true;       
+         }
+        if (isPointInBounds(row - 1, col - 1) && pieces[row - 1][col - 1] === undefined) {
+            return true;       
+         }
+    }
+}
 function checkPossibleEat(row, col, color) {
     if (color === BLACK_PLAYER) {
         if (isPointInBounds(row + 1, col + 1) && pieces[row + 1][col + 1] !== undefined && pieces[row + 1][col + 1].color !== color && isPointInBounds(row + 2, col + 2) && pieces[row + 2][col + 2] === undefined) {
