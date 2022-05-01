@@ -2,6 +2,7 @@
 let selectedCell;
 let pieces = [];
 let currentPiece;
+let anotherPieceCanEat = false;
 const htmlTable = document.createElement('table');
 const TABLE_SIZE = 8;
 const RED_PLAYER = 'red';
@@ -11,11 +12,36 @@ const BLACK_STARTING_ROW = 0;
 
 function onCellClick(e) {
 
-    if (selectedCell === undefined && pieces[e.currentTarget.parentNode.rowIndex][e.currentTarget.cellIndex] !== undefined) {
-        selectedCell = e.currentTarget;
-        selectedCell.classList.add('selected');
-        currentPiece = pieces[selectedCell.parentNode.rowIndex][selectedCell.cellIndex];
-        pieceMovement(e.currentTarget.parentNode.rowIndex, e.currentTarget.cellIndex, currentPiece.color);
+
+    if (selectedCell === undefined && pieces[e.currentTarget.parentNode.rowIndex][e.currentTarget.cellIndex] !== undefined && game.currentTurn === pieces[e.currentTarget.parentNode.rowIndex][e.currentTarget.cellIndex].color) {
+        if (checkPossibleEat(e.currentTarget.parentNode.rowIndex, e.currentTarget.cellIndex, game.currentTurn)) {
+            selectedCell = e.currentTarget;
+            selectedCell.classList.add('selected');
+            currentPiece = pieces[selectedCell.parentNode.rowIndex][selectedCell.cellIndex];
+            pieceMovement(e.currentTarget.parentNode.rowIndex, e.currentTarget.cellIndex, currentPiece.color);
+        }
+        else {
+            labelCancelLoops: for (let i = 0; i < TABLE_SIZE; i++) {
+                for (let j = 0; j < TABLE_SIZE; j++) {
+                    if (pieces[i][j] !== undefined && pieces[i][j].color === game.currentTurn) {
+                        if (checkPossibleEat(i, j, game.currentTurn)) {
+                            anotherPieceCanEat = true;
+                            htmlTable.rows[i].cells[j].classList.add('highlightCorrectPieces');
+                            setTimeout(() => {
+                                htmlTable.rows[i].cells[j].classList.remove('highlightCorrectPieces');
+                            }, 1000);
+                            /* break labelCancelLoops; */
+                        }
+                    }
+                }
+            }
+            if (!anotherPieceCanEat) {
+                selectedCell = e.currentTarget;
+                selectedCell.classList.add('selected');
+                currentPiece = pieces[selectedCell.parentNode.rowIndex][selectedCell.cellIndex];
+                pieceMovement(e.currentTarget.parentNode.rowIndex, e.currentTarget.cellIndex, currentPiece.color);
+            }
+        }
     }
     else if (e.currentTarget.classList.contains('possibleMove')) {
         let row = selectedCell.parentNode.rowIndex; //selectedCell contains the cell of the piece from the previous click
@@ -29,6 +55,8 @@ function onCellClick(e) {
         pieces[row][col] = currentPiece;
         selectedCell.classList.add('checker-' + currentPiece.color);
         unpaintAllCells();
+        selectedCell = undefined;
+        passTheTurn();
     }
     else if (e.currentTarget.classList.contains('possibleAfterEat')) {
         let row = selectedCell.parentNode.rowIndex; //selectedCell contains the cell of the piece from the previous click
@@ -47,6 +75,8 @@ function onCellClick(e) {
         pieces[newRow][newCol] = currentPiece;
         pieces[row + x][col + y] = undefined;
         unpaintAllCells();
+        selectedCell = undefined;
+        passTheTurn();
     }
     else if (selectedCell !== undefined) {
         unpaintAllCells();
@@ -63,6 +93,9 @@ function unpaintAllCells() {
             htmlTable.rows[i].cells[j].classList.remove('possibleAfterEat');
         }
     }
+}
+function passTheTurn() {
+    game.currentTurn = game.currentTurn === BLACK_PLAYER ? RED_PLAYER : BLACK_PLAYER;
 }
 game = new BoardData();
 window.addEventListener('load', game.initCheckersGame);

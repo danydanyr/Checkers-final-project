@@ -61,10 +61,12 @@ td{
     box-shadow: 20px 20px 50px 10px rgb(185, 121, 0) inset;
 }
 .possibleEat{
-    filter: blur(0.07rem);
     box-shadow: 20px 20px 50px 10px rgb(206, 40, 40) inset;
 }
 .possibleAfterEat{
     filter: blur(0.15rem);
+    box-shadow: 20px 20px 50px 10px rgb(185, 121, 0) inset;
+}
+.highlightCorrectPieces{
     box-shadow: 20px 20px 50px 10px rgb(185, 121, 0) inset;
 }

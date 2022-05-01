@@ -1,6 +1,6 @@
 class BoardData {
     constructor() {
-
+        this.currentTurn = RED_PLAYER;
     }
 
     initCheckersGame() {

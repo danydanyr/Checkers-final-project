@@ -37,6 +37,25 @@ function pieceMovement(row, col, color) {
         }
     }
 }
+function checkPossibleEat(row, col, color) {
+    if (color === BLACK_PLAYER) {
+        if (isPointInBounds(row + 1, col + 1) && pieces[row + 1][col + 1] !== undefined && pieces[row + 1][col + 1].color !== color && isPointInBounds(row + 2, col + 2) && pieces[row + 2][col + 2] === undefined) {
+            return true;
+        }
+        if (isPointInBounds(row + 1, col - 1) && pieces[row + 1][col - 1] !== undefined && pieces[row + 1][col - 1].color !== color && isPointInBounds(row + 2, col - 2) && pieces[row + 2][col - 2] === undefined) {
+            return true;
+        }
+    }
+    else {
+        if (isPointInBounds(row - 1, col + 1) && pieces[row - 1][col + 1] !== undefined && pieces[row - 1][col + 1].color !== color && isPointInBounds(row - 2, col + 2) && pieces[row - 2][col + 2] === undefined) {
+            return true;
+        }
+        if (isPointInBounds(row - 1, col - 1) && pieces[row - 1][col - 1] !== undefined && pieces[row - 1][col - 1].color !== color && isPointInBounds(row - 2, col - 2) && pieces[row - 2][col - 2] === undefined) {
+            return true;
+        }
+    }
+    return false;
+}
 function paintPossibleMove(row, col) {
     htmlTable.rows[row].cells[col].classList.add('possibleMove');
 }
