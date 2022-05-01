@@ -29,14 +29,15 @@ td{
 .checker-red::after{
     content: "";
     display: block;
-    background: rgb(167, 45, 45);
+    background: rgb(136, 39, 39);
     border-radius: 50%;
     width:70%;
     height:70%;
     left: 10%;
     top: 10%;
     transform: translate(22%, -0%);
-    box-shadow: 0 0 0 5px black
+    box-shadow: 0 0 0 5px black;
+    z-index: 2;
 }
 .checker-black::after{
     content: "";
@@ -51,14 +52,19 @@ td{
     box-shadow: 0 0 0 5px rgb(56, 56, 56)
 }
 .selected{
-    filter: blur(0.10rem);
-    box-shadow: 20px 20px 50px 10px rgb(13, 122, 13) inset;
+    background: rgba(22, 114, 3, 0.8);
+    /* filter: blur(0.10rem);
+    box-shadow: 20px 20px 50px 10px rgb(13, 122, 13) inset; */
 }
 .possibleMove{
     filter: blur(0.15rem);
     box-shadow: 20px 20px 50px 10px rgb(185, 121, 0) inset;
 }
 .possibleEat{
-    filter: blur(0.15rem);
+    filter: blur(0.07rem);
     box-shadow: 20px 20px 50px 10px rgb(206, 40, 40) inset;
+}
+.possibleAfterEat{
+    filter: blur(0.15rem);
+    box-shadow: 20px 20px 50px 10px rgb(185, 121, 0) inset;
 }
