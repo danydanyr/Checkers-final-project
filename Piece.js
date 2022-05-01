@@ -56,6 +56,28 @@ function checkPossibleEat(row, col, color) {
     }
     return false;
 }
+function onlyWhenPossibleEat(row, col, color) {
+    if (color === BLACK_PLAYER) {
+        if (isPointInBounds(row + 1, col + 1) && pieces[row + 1][col + 1] !== undefined && pieces[row + 1][col + 1].color !== color && isPointInBounds(row + 2, col + 2) && pieces[row + 2][col + 2] === undefined) {
+            paintPossibleEat(row + 1, col + 1);
+            paintPossibleAfterEat(row + 2, col + 2);
+        }
+        if (isPointInBounds(row + 1, col - 1) && pieces[row + 1][col - 1] !== undefined && pieces[row + 1][col - 1].color !== color && isPointInBounds(row + 2, col - 2) && pieces[row + 2][col - 2] === undefined) {
+            paintPossibleEat(row + 1, col - 1);
+            paintPossibleAfterEat(row + 2, col - 2);
+        }
+    }
+    else {
+        if (isPointInBounds(row - 1, col + 1) && pieces[row - 1][col + 1] !== undefined && pieces[row - 1][col + 1].color !== color && isPointInBounds(row - 2, col + 2) && pieces[row - 2][col + 2] === undefined) {
+            paintPossibleEat(row - 1, col + 1);
+            paintPossibleAfterEat(row - 2, col + 2);
+        }
+        if (isPointInBounds(row - 1, col - 1) && pieces[row - 1][col - 1] !== undefined && pieces[row - 1][col - 1].color !== color && isPointInBounds(row - 2, col - 2) && pieces[row - 2][col - 2] === undefined) {
+            paintPossibleEat(row - 1, col - 1);
+            paintPossibleAfterEat(row - 2, col - 2);
+        }
+    }
+}
 function paintPossibleMove(row, col) {
     htmlTable.rows[row].cells[col].classList.add('possibleMove');
 }

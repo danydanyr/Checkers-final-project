@@ -18,19 +18,18 @@ function onCellClick(e) {
             selectedCell = e.currentTarget;
             selectedCell.classList.add('selected');
             currentPiece = pieces[selectedCell.parentNode.rowIndex][selectedCell.cellIndex];
-            pieceMovement(e.currentTarget.parentNode.rowIndex, e.currentTarget.cellIndex, currentPiece.color);
+            onlyWhenPossibleEat(e.currentTarget.parentNode.rowIndex, e.currentTarget.cellIndex, currentPiece.color);
         }
         else {
-            labelCancelLoops: for (let i = 0; i < TABLE_SIZE; i++) {
+            for (let i = 0; i < TABLE_SIZE; i++) {
                 for (let j = 0; j < TABLE_SIZE; j++) {
                     if (pieces[i][j] !== undefined && pieces[i][j].color === game.currentTurn) {
                         if (checkPossibleEat(i, j, game.currentTurn)) {
                             anotherPieceCanEat = true;
                             htmlTable.rows[i].cells[j].classList.add('highlightCorrectPieces');
-                            setTimeout(() => {
+                            setTimeout(() => {                                                          //flashing the cell to indicate the piece you need to move with
                                 htmlTable.rows[i].cells[j].classList.remove('highlightCorrectPieces');
                             }, 1000);
-                            /* break labelCancelLoops; */
                         }
                     }
                 }
@@ -41,6 +40,7 @@ function onCellClick(e) {
                 currentPiece = pieces[selectedCell.parentNode.rowIndex][selectedCell.cellIndex];
                 pieceMovement(e.currentTarget.parentNode.rowIndex, e.currentTarget.cellIndex, currentPiece.color);
             }
+            anotherPieceCanEat = false;
         }
     }
     else if (e.currentTarget.classList.contains('possibleMove')) {
