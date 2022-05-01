@@ -17,6 +17,18 @@ function onCellClick(e) {
         currentPiece = pieces[selectedCell.parentNode.rowIndex][selectedCell.cellIndex];
         pieceMovement(e.currentTarget.parentNode.rowIndex, e.currentTarget.cellIndex, currentPiece.player);
     }
+    else if (e.currentTarget.classList.contains('possibleMove')) {
+        let row = selectedCell.parentNode.rowIndex; //selectedCell contains the cell of the piece from the previous click
+        let col = selectedCell.cellIndex;
+        pieces[row][col] = undefined;
+        selectedCell.classList.remove('checker-' + currentPiece.player);
+        selectedCell = e.currentTarget; //now selectedCell contains the clicked on cell
+        row = selectedCell.parentNode.rowIndex;
+        col = selectedCell.cellIndex;
+        pieces[row][col] = currentPiece;
+        selectedCell.classList.add('checker-' + currentPiece.player);
+        unpaintAllCells();
+    }
     else if (selectedCell !== undefined) {
         unpaintAllCells();
         selectedCell = undefined;

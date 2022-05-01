@@ -8,7 +8,7 @@ table {
     border: 20px solid rgb(129, 84, 1);
 }
 td{
-    transition: 0.5s;
+    transition: 0.3s;
 }
 .white-cell{
     background: rgb(204, 204, 204);
@@ -31,30 +31,32 @@ td{
     display: block;
     background: rgb(167, 45, 45);
     border-radius: 50%;
-    width:80%;
-    height:80%;
+    width:70%;
+    height:70%;
     left: 10%;
     top: 10%;
-    transform: translate(10%, -0%);
+    transform: translate(22%, -0%);
+    box-shadow: 0 0 0 5px black
 }
 .checker-black::after{
     content: "";
     display: block;
     background: rgb(3, 3, 3);
     border-radius: 50%;
-    width:80%;
-    height:80%;
+    width:70%;
+    height:70%;
     left: 10%;
     top: 10%;
-    transform: translate(10%, 0%);
+    transform: translate(22%, 0%);
+    box-shadow: 0 0 0 5px rgb(56, 56, 56)
 }
 .selected{
-    filter: blur(0.15rem);
+    filter: blur(0.10rem);
     box-shadow: 20px 20px 50px 10px rgb(13, 122, 13) inset;
 }
 .possibleMove{
     filter: blur(0.15rem);
-    box-shadow: 20px 20px 50px 10px rgb(140, 161, 16) inset;
+    box-shadow: 20px 20px 50px 10px rgb(185, 121, 0) inset;
 }
 .possibleEat{
     filter: blur(0.15rem);
