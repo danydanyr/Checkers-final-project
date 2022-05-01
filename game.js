@@ -9,6 +9,7 @@ const RED_PLAYER = 'red';
 const BLACK_PLAYER = 'black';
 const RED_STARTING_ROW = 5;
 const BLACK_STARTING_ROW = 0;
+const PIECES_AMOUNT = 12
 
 function onCellClick(e) {
 
@@ -18,7 +19,7 @@ function onCellClick(e) {
             selectedCell = e.currentTarget;
             selectedCell.classList.add('selected');
             currentPiece = pieces[selectedCell.parentNode.rowIndex][selectedCell.cellIndex];
-            onlyWhenPossibleEat(e.currentTarget.parentNode.rowIndex, e.currentTarget.cellIndex, currentPiece.color);
+            onlyPossibleEat(e.currentTarget.parentNode.rowIndex, e.currentTarget.cellIndex, currentPiece.color);
         }
         else {
             for (let i = 0; i < TABLE_SIZE; i++) {
@@ -76,6 +77,16 @@ function onCellClick(e) {
         pieces[row + x][col + y] = undefined;
         unpaintAllCells();
         selectedCell = undefined;
+        if (game.currentTurn === RED_PLAYER) {
+            game.blackEaten++;
+            console.log('black eaten '+ game.blackEaten);
+        }
+        else {
+            game.redEaten++;
+            console.log('red eaten '+ game.redEaten);
+        }
+        if (didIWin())
+            return;
         passTheTurn();
     }
     else if (selectedCell !== undefined) {
@@ -96,6 +107,24 @@ function unpaintAllCells() {
 }
 function passTheTurn() {
     game.currentTurn = game.currentTurn === BLACK_PLAYER ? RED_PLAYER : BLACK_PLAYER;
+}
+function didIWin() {
+    if (game.redEaten === PIECES_AMOUNT || game.blackEaten === PIECES_AMOUNT) {
+        const winnerPopup = document.createElement('div');
+        const winner = game.currentTurn.charAt(0).toUpperCase() + game.currentTurn.slice(1);
+        winnerPopup.textContent = winner + ' is the bigger nerd!';
+        winnerPopup.classList.add('winner-dialog');
+        button = document.createElement("BUTTON");
+        button.innerHTML = "Play Again?";
+        button.classList.add('button');
+        button.addEventListener("click", reloadgame);
+        htmlTable.appendChild(winnerPopup);
+        winnerPopup.appendChild(button);
+        return true;
+    }
+}
+function reloadgame() {
+    window.location.reload();
 }
 game = new BoardData();
 window.addEventListener('load', game.initCheckersGame);

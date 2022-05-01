@@ -3,36 +3,21 @@ class Piece {
         this.color = color;
     }
 }
+
 function pieceMovement(row, col, color) {
     if (color === BLACK_PLAYER) {
-        if (isPointInBounds(row + 1, col + 1) && pieces[row + 1][col + 1] !== undefined && pieces[row + 1][col + 1].color !== color && isPointInBounds(row + 2, col + 2) && pieces[row + 2][col + 2] === undefined) {
-            paintPossibleEat(row + 1, col + 1);
-            paintPossibleAfterEat(row + 2, col + 2);
-        }
-        else if (isPointInBounds(row + 1, col + 1) && pieces[row + 1][col + 1] === undefined) {
+        if (isPointInBounds(row + 1, col + 1) && pieces[row + 1][col + 1] === undefined) {
             paintPossibleMove(row + 1, col + 1);
         }
-        if (isPointInBounds(row + 1, col - 1) && pieces[row + 1][col - 1] !== undefined && pieces[row + 1][col - 1].color !== color && isPointInBounds(row + 2, col - 2) && pieces[row + 2][col - 2] === undefined) {
-            paintPossibleEat(row + 1, col - 1);
-            paintPossibleAfterEat(row + 2, col - 2);
-        }
-        else if (isPointInBounds(row + 1, col - 1) && pieces[row + 1][col - 1] === undefined) {
+        if (isPointInBounds(row + 1, col - 1) && pieces[row + 1][col - 1] === undefined) {
             paintPossibleMove(row + 1, col - 1);
         }
     }
     else {
-        if (isPointInBounds(row - 1, col + 1) && pieces[row - 1][col + 1] !== undefined && pieces[row - 1][col + 1].color !== color && isPointInBounds(row - 2, col + 2) && pieces[row - 2][col + 2] === undefined) {
-            paintPossibleEat(row - 1, col + 1);
-            paintPossibleAfterEat(row - 2, col + 2);
-        }
-        else if (isPointInBounds(row - 1, col + 1) && pieces[row - 1][col + 1] === undefined) {
+        if (isPointInBounds(row - 1, col + 1) && pieces[row - 1][col + 1] === undefined) {
             paintPossibleMove(row - 1, col + 1);
         }
-        if (isPointInBounds(row - 1, col - 1) && pieces[row - 1][col - 1] !== undefined && pieces[row - 1][col - 1].color !== color && isPointInBounds(row - 2, col - 2) && pieces[row - 2][col - 2] === undefined) {
-            paintPossibleEat(row - 1, col - 1);
-            paintPossibleAfterEat(row - 2, col - 2);
-        }
-        else if (isPointInBounds(row - 1, col - 1) && pieces[row - 1][col - 1] === undefined) {
+        if (isPointInBounds(row - 1, col - 1) && pieces[row - 1][col - 1] === undefined) {
             paintPossibleMove(row - 1, col - 1);
         }
     }
@@ -56,7 +41,7 @@ function checkPossibleEat(row, col, color) {
     }
     return false;
 }
-function onlyWhenPossibleEat(row, col, color) {
+function onlyPossibleEat(row, col, color) {
     if (color === BLACK_PLAYER) {
         if (isPointInBounds(row + 1, col + 1) && pieces[row + 1][col + 1] !== undefined && pieces[row + 1][col + 1].color !== color && isPointInBounds(row + 2, col + 2) && pieces[row + 2][col + 2] === undefined) {
             paintPossibleEat(row + 1, col + 1);

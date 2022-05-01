@@ -1,14 +1,16 @@
 class BoardData {
     constructor() {
         this.currentTurn = RED_PLAYER;
+        this.redEaten = 0;
+        this.blackEaten = 0;
     }
 
     initCheckersGame() {
 
         document.body.appendChild(htmlTable);
-        for (let i = 0; i < 8; i++) {
+        for (let i = 0; i < TABLE_SIZE; i++) {
             const row = htmlTable.insertRow();
-            for (let j = 0; j < 8; j++) {
+            for (let j = 0; j < TABLE_SIZE; j++) {
                 const cell = row.insertCell();
                 if ((i + j) % 2 == 0)
                     cell.className = 'white-cell';
