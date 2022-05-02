@@ -10,7 +10,11 @@ const RED_PLAYER = 'red';
 const BLACK_PLAYER = 'black';
 const RED_STARTING_ROW = 5;
 const BLACK_STARTING_ROW = 0;
-const PIECES_AMOUNT = 12
+const RED_QUEEN_ROW = 0;
+const BLACK_QUEEN_ROW = 7;
+const PIECES_AMOUNT = 12;
+const queenXArray = [1, -1, 1, -1];                //all queen possible movies in this 2 arrays
+const queenYArray = [1, -1, -1, 1];
 
 function onCellClick(e) {
 
@@ -57,6 +61,7 @@ function onCellClick(e) {
         pieces[row][col] = currentPiece;
         selectedCell.classList.add('checker-' + currentPiece.color);
         unpaintAllCells();
+        isQueen(e.currentTarget.parentNode.rowIndex, e.currentTarget.cellIndex, currentPiece.color);
         selectedCell = undefined;
         if (isGameOver()) {
             gameover = true;
@@ -82,15 +87,9 @@ function onCellClick(e) {
         pieces[newRow][newCol] = currentPiece;
         pieces[row + x][col + y] = undefined;
         unpaintAllCells();
+        isQueen(e.currentTarget.parentNode.rowIndex, e.currentTarget.cellIndex, currentPiece.color);
         selectedCell = undefined;
-        if (game.currentTurn === RED_PLAYER) {
-            game.blackEaten++;
-            console.log('black eaten ' + game.blackEaten);
-        }
-        else {
-            game.redEaten++;
-            console.log('red eaten ' + game.redEaten);
-        }
+        game.currentTurn === RED_PLAYER ? game.blackEaten++ : game.redEaten++; //keeps count of the amount of eaten pieces for each color 
         if (isGameOver()) {
             gameover = true;
             if (didIWin())
@@ -117,6 +116,13 @@ function unpaintAllCells() {
 }
 function passTheTurn() {
     game.currentTurn = game.currentTurn === BLACK_PLAYER ? RED_PLAYER : BLACK_PLAYER;
+}
+function isQueen(row, col, color) {
+    let currentRowForQueen = color === BLACK_PLAYER ? BLACK_QUEEN_ROW : RED_QUEEN_ROW
+    if (row === currentRowForQueen) {
+        pieces[row][col] = new Queen(color);
+        selectedCell.classList.add('addQueen');
+    }
 }
 function isGameOver() {
     for (let i = 0; i < TABLE_SIZE; i++) {

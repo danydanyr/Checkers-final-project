@@ -3,6 +3,27 @@ class Piece {
         this.color = color;
     }
 }
+class Queen {
+    constructor(color) {
+        this.color = color;
+    }
+}
+function QueenMovement(row, col, color) {
+    let x, y;
+    for (let i = 0; i < queenXArray.length; i++) {
+        x = row + queenXArray[i];
+        y = col + queenYArray[i];
+        for (let j = 0; j < TABLE_SIZE; j++) {
+            if (!isPointInBounds(x, y)) break;
+            
+            if (pieces[x][y] && pieces[x][y].color === color) break;
+            //else if the cell is empty
+            paintPossibleMove(x, y);
+            x += queenXArray[i];
+            y += queenYArray[i];
+        }
+    }
+}
 
 function pieceMovement(row, col, color) {
     if (color === BLACK_PLAYER) {
