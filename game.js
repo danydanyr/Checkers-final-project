@@ -18,33 +18,38 @@ const queenYArray = [1, -1, -1, 1];
 
 function onCellClick(e) {
 
-
     if (selectedCell === undefined && pieces[e.currentTarget.parentNode.rowIndex][e.currentTarget.cellIndex] !== undefined && game.currentTurn === pieces[e.currentTarget.parentNode.rowIndex][e.currentTarget.cellIndex].color) {
-        if (checkPossibleEat(e.currentTarget.parentNode.rowIndex, e.currentTarget.cellIndex, game.currentTurn)) {
-            selectedCell = e.currentTarget;
+        selectedCell = e.currentTarget;
+        currentPiece = pieces[selectedCell.parentNode.rowIndex][selectedCell.cellIndex];
+
+        if (currentPiece.isQueen && QueenPossibleEat(selectedCell.parentNode.rowIndex, selectedCell.cellIndex, game.currentTurn)) {
             selectedCell.classList.add('selected');
-            currentPiece = pieces[selectedCell.parentNode.rowIndex][selectedCell.cellIndex];
-            onlyPossibleEat(e.currentTarget.parentNode.rowIndex, e.currentTarget.cellIndex, currentPiece.color);
+            QueenOnlyEat(selectedCell.parentNode.rowIndex, selectedCell.cellIndex, currentPiece.color);
+        }
+        else if (checkPossibleEat(selectedCell.parentNode.rowIndex, selectedCell.cellIndex, game.currentTurn)) {
+            selectedCell.classList.add('selected');
+            onlyPossibleEat(selectedCell.parentNode.rowIndex, selectedCell.cellIndex, currentPiece.color);
         }
         else {
             for (let i = 0; i < TABLE_SIZE; i++) {
                 for (let j = 0; j < TABLE_SIZE; j++) {
                     if (pieces[i][j] !== undefined && pieces[i][j].color === game.currentTurn) {
-                        if (checkPossibleEat(i, j, game.currentTurn)) {
+                        if (checkPossibleEat(i, j, game.currentTurn) || (pieces[i][j].isQueen && QueenPossibleEat(i, j, game.currentTurn))) {
                             anotherPieceCanEat = true;
                             htmlTable.rows[i].cells[j].classList.add('highlightCorrectPieces');
-                            setTimeout(() => {                                                          //flashing the cell to indicate the piece you need to move with
+                            setTimeout(() => {                                                          //flashing the cell/s to indicate the piece/s you need to move with (the piece/s that can eat)
                                 htmlTable.rows[i].cells[j].classList.remove('highlightCorrectPieces');
-                            }, 1000);
+                            }, 1300);
                         }
                     }
                 }
             }
             if (!anotherPieceCanEat) {
-                selectedCell = e.currentTarget;
                 selectedCell.classList.add('selected');
-                currentPiece = pieces[selectedCell.parentNode.rowIndex][selectedCell.cellIndex];
-                pieceMovement(e.currentTarget.parentNode.rowIndex, e.currentTarget.cellIndex, currentPiece.color);
+                if (!currentPiece.isQueen)
+                    pieceMovement(selectedCell.parentNode.rowIndex, selectedCell.cellIndex, currentPiece.color);
+                else
+                    QueenMovement(selectedCell.parentNode.rowIndex, selectedCell.cellIndex, currentPiece.color);
             }
             anotherPieceCanEat = false;
         }
@@ -52,16 +57,19 @@ function onCellClick(e) {
     else if (e.currentTarget.classList.contains('possibleMove')) {
         let row = selectedCell.parentNode.rowIndex; //selectedCell contains the cell of the piece from the previous click
         let col = selectedCell.cellIndex;
-        pieces[row][col] = undefined;
         selectedCell.classList.remove('checker-' + currentPiece.color);
+        selectedCell.classList.remove('addQueen');
+        pieces[row][col] = undefined;
 
         selectedCell = e.currentTarget; //now selectedCell contains the clicked on cell
         row = selectedCell.parentNode.rowIndex;
         col = selectedCell.cellIndex;
         pieces[row][col] = currentPiece;
         selectedCell.classList.add('checker-' + currentPiece.color);
+        if (currentPiece.isQueen)
+            selectedCell.classList.add('addQueen');
         unpaintAllCells();
-        isQueen(e.currentTarget.parentNode.rowIndex, e.currentTarget.cellIndex, currentPiece.color);
+        isPieceQueen(e.currentTarget.parentNode.rowIndex, e.currentTarget.cellIndex, currentPiece.color);
         selectedCell = undefined;
         if (isGameOver()) {
             gameover = true;
@@ -75,6 +83,7 @@ function onCellClick(e) {
         let col = selectedCell.cellIndex;
         pieces[row][col] = undefined;
         selectedCell.classList.remove('checker-' + currentPiece.color);
+        selectedCell.classList.remove('addQueen');
 
         selectedCell = e.currentTarget; //now selectedCell contains the clicked on cell
         let newRow = selectedCell.parentNode.rowIndex;
@@ -84,10 +93,12 @@ function onCellClick(e) {
         let opponentColor = currentPiece.color === BLACK_PLAYER ? RED_PLAYER : BLACK_PLAYER;
         htmlTable.rows[row + x].cells[col + y].classList.remove('checker-' + opponentColor); //removing the eaten piece by adding the direction (x,y) to the row and column of the piece that ate it
         selectedCell.classList.add('checker-' + currentPiece.color);
+        if (currentPiece.isQueen)
+            selectedCell.classList.add('addQueen');
         pieces[newRow][newCol] = currentPiece;
         pieces[row + x][col + y] = undefined;
         unpaintAllCells();
-        isQueen(e.currentTarget.parentNode.rowIndex, e.currentTarget.cellIndex, currentPiece.color);
+        isPieceQueen(e.currentTarget.parentNode.rowIndex, e.currentTarget.cellIndex, currentPiece.color);
         selectedCell = undefined;
         game.currentTurn === RED_PLAYER ? game.blackEaten++ : game.redEaten++; //keeps count of the amount of eaten pieces for each color 
         if (isGameOver()) {
@@ -97,7 +108,7 @@ function onCellClick(e) {
         }
         passTheTurn();
     }
-    else if (selectedCell !== undefined) {
+    else if (selectedCell !== undefined) { //when clicking on another piece while one is alreay selected
         unpaintAllCells();
         selectedCell = undefined;
         onCellClick(e);
@@ -117,7 +128,7 @@ function unpaintAllCells() {
 function passTheTurn() {
     game.currentTurn = game.currentTurn === BLACK_PLAYER ? RED_PLAYER : BLACK_PLAYER;
 }
-function isQueen(row, col, color) {
+function isPieceQueen(row, col, color) {
     let currentRowForQueen = color === BLACK_PLAYER ? BLACK_QUEEN_ROW : RED_QUEEN_ROW
     if (row === currentRowForQueen) {
         pieces[row][col] = new Queen(color);
