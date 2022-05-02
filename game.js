@@ -86,18 +86,12 @@ function onCellClick(e) {
         selectedCell.classList.remove('addQueen');
 
         selectedCell = e.currentTarget; //now selectedCell contains the clicked on cell
-        let newRow = selectedCell.parentNode.rowIndex;
-        let newCol = selectedCell.cellIndex;
-        let x = (newRow - row) - ((newRow - row) / 2); //I'm checking where is the eaten piece located/what is the direction of the eaten piece from the piece that ate it
-        let y = (newCol - col) - ((newCol - col) / 2);
-        let opponentColor = currentPiece.color === BLACK_PLAYER ? RED_PLAYER : BLACK_PLAYER;
-        htmlTable.rows[row + x].cells[col + y].classList.remove('checker-' + opponentColor); //removing the eaten piece by adding the direction (x,y) to the row and column of the piece that ate it
+        row = selectedCell.parentNode.rowIndex;
+        col = selectedCell.cellIndex;
         selectedCell.classList.add('checker-' + currentPiece.color);
         if (currentPiece.isQueen)
             selectedCell.classList.add('addQueen');
-        pieces[newRow][newCol] = currentPiece;
-        pieces[row + x][col + y] = undefined;
-        unpaintAllCells();
+        pieces[row][col] = currentPiece;
         isPieceQueen(e.currentTarget.parentNode.rowIndex, e.currentTarget.cellIndex, currentPiece.color);
         selectedCell = undefined;
         game.currentTurn === RED_PLAYER ? game.blackEaten++ : game.redEaten++; //keeps count of the amount of eaten pieces for each color 
@@ -107,6 +101,8 @@ function onCellClick(e) {
                 return;
         }
         passTheTurn();
+        removeEatenPiece();
+        unpaintAllCells();
     }
     else if (selectedCell !== undefined) { //when clicking on another piece while one is alreay selected
         unpaintAllCells();
@@ -118,10 +114,22 @@ function onCellClick(e) {
 function unpaintAllCells() {
     for (let i = 0; i < TABLE_SIZE; i++) {
         for (let j = 0; j < TABLE_SIZE; j++) {
+            htmlTable.rows[i].cells[j].classList.remove('possibleEat');
             htmlTable.rows[i].cells[j].classList.remove('selected');
             htmlTable.rows[i].cells[j].classList.remove('possibleMove');
-            htmlTable.rows[i].cells[j].classList.remove('possibleEat');
             htmlTable.rows[i].cells[j].classList.remove('possibleAfterEat');
+        }
+    }
+}
+function removeEatenPiece() {
+    for (let i = 0; i < TABLE_SIZE; i++) {
+        for (let j = 0; j < TABLE_SIZE; j++) {
+            if (htmlTable.rows[i].cells[j].classList.contains('possibleEat')) {
+                htmlTable.rows[i].cells[j].classList.remove('checker-' + game.currentTurn);
+                htmlTable.rows[i].cells[j].classList.remove('addQueen');
+                pieces[i][j] = undefined;
+                htmlTable.rows[i].cells[j].classList.remove('possibleEat');
+            }
         }
     }
 }
@@ -139,7 +147,10 @@ function isGameOver() {
     for (let i = 0; i < TABLE_SIZE; i++) {
         for (let j = 0; j < TABLE_SIZE; j++) {
             if (pieces[i][j] !== undefined && pieces[i][j].color !== game.currentTurn) {
-                if (checkPossibleMove(i, j, pieces[i][j].color) || checkPossibleEat(i, j, pieces[i][j].color)) { //checking if at least one of the opponnents pieces can move
+                if (!pieces[i][j].isQueen && (checkPossibleMove(i, j, pieces[i][j].color) || checkPossibleEat(i, j, pieces[i][j].color))) { //checking if at least one of the opponnents pieces can move
+                    return false;
+                }
+                if (pieces[i][j].isQueen && (QueenPossibleEat(i, j, pieces[i][j].color) || QueenCheckMove(i, j, pieces[i][j].color))) {
                     return false;
                 }
             }

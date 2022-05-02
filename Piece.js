@@ -26,6 +26,23 @@ function QueenMovement(row, col, color) {
         }
     }
 }
+function QueenCheckMove(row, col, color) {
+    let x, y;
+    for (let i = 0; i < queenXArray.length; i++) {
+        x = row + queenXArray[i];
+        y = col + queenYArray[i];
+        for (let j = 0; j < TABLE_SIZE; j++) {
+            if (!isPointInBounds(x, y)) break;
+
+            if (pieces[x][y] && pieces[x][y].color !== undefined) break;
+            //else if the cell is empty
+            return true;
+            x += queenXArray[i];
+            y += queenYArray[i];
+        }
+    }
+    return false;
+}
 function QueenOnlyEat(row, col, color) {
     let x, y;
     for (let i = 0; i < queenXArray.length; i++) {
@@ -37,7 +54,6 @@ function QueenOnlyEat(row, col, color) {
             if (pieces[x][y] && pieces[x][y].color !== color) {
                 x += queenXArray[i];
                 y += queenYArray[i];
-                console.log(x + ' ' + y);
                 if (isPointInBounds(x, y) && pieces[x][y] === undefined) {
                     paintPossibleAfterEat(x, y);
                     paintPossibleEat(x - queenXArray[i], y - queenYArray[i]);
