@@ -95,14 +95,14 @@ function onCellClick(e) {
         isPieceQueen(e.currentTarget.parentNode.rowIndex, e.currentTarget.cellIndex, currentPiece.color);
         selectedCell = undefined;
         game.currentTurn === RED_PLAYER ? game.blackEaten++ : game.redEaten++; //keeps count of the amount of eaten pieces for each color 
+        removeEatenPiece();
+        unpaintAllCells();
         if (isGameOver()) {
             gameover = true;
             if (didIWin())
                 return;
         }
         passTheTurn();
-        removeEatenPiece();
-        unpaintAllCells();
     }
     else if (selectedCell !== undefined) { //when clicking on another piece while one is alreay selected
         unpaintAllCells();
@@ -125,7 +125,8 @@ function removeEatenPiece() {
     for (let i = 0; i < TABLE_SIZE; i++) {
         for (let j = 0; j < TABLE_SIZE; j++) {
             if (htmlTable.rows[i].cells[j].classList.contains('possibleEat')) {
-                htmlTable.rows[i].cells[j].classList.remove('checker-' + game.currentTurn);
+                let opponentColor = game.currentTurn === BLACK_PLAYER ? RED_PLAYER : BLACK_PLAYER;
+                htmlTable.rows[i].cells[j].classList.remove('checker-' + opponentColor);
                 htmlTable.rows[i].cells[j].classList.remove('addQueen');
                 pieces[i][j] = undefined;
                 htmlTable.rows[i].cells[j].classList.remove('possibleEat');
@@ -159,7 +160,7 @@ function isGameOver() {
     return true;
 }
 function didIWin() {
-    if (game.redEaten === PIECES_AMOUNT || game.blackEaten === PIECES_AMOUNT || gameOver) {
+    if (game.redEaten === PIECES_AMOUNT || game.blackEaten === PIECES_AMOUNT || gameover) {
         const winnerPopup = document.createElement('div');
         const winner = game.currentTurn.charAt(0).toUpperCase() + game.currentTurn.slice(1);
         winnerPopup.textContent = winner + ' is the bigger nerd!';
