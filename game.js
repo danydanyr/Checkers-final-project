@@ -144,7 +144,6 @@ function removeEatenPiece(row, col) {
     for (let i = 0; i < queenXArray.length; i++) {
         x = row + queenXArray[i];
         y = col + queenYArray[i];
-        console.log(x + ' ' + y);
         if (!isPointInBounds(x, y)) continue;
         if (htmlTable.rows[x].cells[y].classList.contains('possibleEat')) {
             let opponentColor = game.currentTurn === BLACK_PLAYER ? RED_PLAYER : BLACK_PLAYER;
@@ -152,7 +151,6 @@ function removeEatenPiece(row, col) {
             htmlTable.rows[x].cells[y].classList.remove('addQueen');
             pieces[x][y] = undefined;
             htmlTable.rows[x].cells[y].classList.remove('possibleEat');
-            console.log(x + ' ' + y);
         }
     }
 }
