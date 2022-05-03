@@ -63,13 +63,12 @@ function onCellClick(e) {
     }
     //if the player clicked on a possible move
     else if (selectedCell.classList.contains('possibleMove')) {
-        let row = selectedPieceCell.parentNode.rowIndex; //selectedCell contains the cell of the piece from the previous click
+        let row = selectedPieceCell.parentNode.rowIndex;
         let col = selectedPieceCell.cellIndex;
         selectedPieceCell.classList.remove('checker-' + currentPiece.color);
         selectedPieceCell.classList.remove('addQueen');
         pieces[row][col] = undefined;
 
-        //now selectedCell contains the clicked on cell
         row = selectedCell.parentNode.rowIndex;
         col = selectedCell.cellIndex;
         pieces[row][col] = currentPiece;
@@ -87,13 +86,12 @@ function onCellClick(e) {
         passTheTurn();
     }
     else if (selectedCell.classList.contains('possibleAfterEat')) {
-        let row = selectedPieceCell.parentNode.rowIndex; //selectedCell contains the cell of the piece from the previous click
+        let row = selectedPieceCell.parentNode.rowIndex;
         let col = selectedPieceCell.cellIndex;
         pieces[row][col] = undefined;
         selectedPieceCell.classList.remove('checker-' + currentPiece.color);
         selectedPieceCell.classList.remove('addQueen');
 
-        //now selectedCell contains the clicked on cell
         row = selectedCell.parentNode.rowIndex;
         col = selectedCell.cellIndex;
         selectedCell.classList.add('checker-' + currentPiece.color);
