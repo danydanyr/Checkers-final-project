@@ -77,7 +77,7 @@ function onCellClick(e) {
         if (currentPiece.isQueen)
             selectedCell.classList.add('addQueen');
         unpaintAllCells();
-        isPieceQueen(e.currentTarget.parentNode.rowIndex, e.currentTarget.cellIndex, currentPiece.color);
+        isPieceQueen(selectedCell.parentNode.rowIndex, selectedCell.cellIndex, currentPiece.color);
         selectedPieceCell = undefined;
         if (isGameOver()) {
             gameover = true;
@@ -100,7 +100,7 @@ function onCellClick(e) {
         if (currentPiece.isQueen)
             selectedCell.classList.add('addQueen');
         pieces[row][col] = currentPiece;
-        removeEatenPiece();
+        removeEatenPiece(row, col);
         unpaintAllCells();
         game.currentTurn === RED_PLAYER ? game.blackEaten++ : game.redEaten++; //keeps count of the amount of eaten pieces for each color 
         //checks if there is another possible
@@ -111,7 +111,7 @@ function onCellClick(e) {
             return;
         }
 
-        isPieceQueen(e.currentTarget.parentNode.rowIndex, e.currentTarget.cellIndex, currentPiece.color);
+        isPieceQueen(selectedCell.parentNode.rowIndex, selectedCell.cellIndex, currentPiece.color);
         selectedPieceCell = undefined;
         if (isGameOver()) {
             gameover = true;
@@ -139,19 +139,25 @@ function unpaintAllCells() {
         }
     }
 }
-function removeEatenPiece() {
-    for (let i = 0; i < TABLE_SIZE; i++) {
-        for (let j = 0; j < TABLE_SIZE; j++) {
-            if (htmlTable.rows[i].cells[j].classList.contains('possibleEat')) {
-                let opponentColor = game.currentTurn === BLACK_PLAYER ? RED_PLAYER : BLACK_PLAYER;
-                htmlTable.rows[i].cells[j].classList.remove('checker-' + opponentColor);
-                htmlTable.rows[i].cells[j].classList.remove('addQueen');
-                pieces[i][j] = undefined;
-                htmlTable.rows[i].cells[j].classList.remove('possibleEat');
-            }
+function removeEatenPiece(row, col) {
+    let x, y;
+    for (let i = 0; i < queenXArray.length; i++) {
+        x = row + queenXArray[i];
+        y = col + queenYArray[i];
+        console.log(x + ' ' + y);
+        if (!isPointInBounds(x, y)) continue;
+        if (htmlTable.rows[x].cells[y].classList.contains('possibleEat')) {
+            let opponentColor = game.currentTurn === BLACK_PLAYER ? RED_PLAYER : BLACK_PLAYER;
+            htmlTable.rows[x].cells[y].classList.remove('checker-' + opponentColor);
+            htmlTable.rows[x].cells[y].classList.remove('addQueen');
+            pieces[x][y] = undefined;
+            htmlTable.rows[x].cells[y].classList.remove('possibleEat');
+            console.log(x + ' ' + y);
         }
     }
 }
+
+
 function passTheTurn() {
     game.currentTurn = game.currentTurn === BLACK_PLAYER ? RED_PLAYER : BLACK_PLAYER;
     document.body.style.backgroundColor = document.body.style.backgroundColor === 'black' ? 'rgb(131, 48, 48)' : 'black'; //also changes the background color
