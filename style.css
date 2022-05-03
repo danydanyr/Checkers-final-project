@@ -1,6 +1,8 @@
 body{
     display: flex;
     justify-content: center;
+    background: rgb(131, 48, 48);
+    transition: 0.5s;
 }
 table {
     position: absolute;
@@ -49,7 +51,7 @@ td{
     left: 10%;
     top: 10%;
     transform: translate(22%, 0%);
-    box-shadow: 0 0 0 5px rgb(56, 56, 56)
+    box-shadow: 0 0 0 5px rgb(56, 56, 56);
 }
 .selected{
     background: rgba(22, 114, 3, 0.8);
@@ -69,13 +71,7 @@ td{
 }
 .highlightCorrectPieces{
     box-shadow: 20px 20px 50px 10px rgb(185, 121, 0) inset;
-    animation: blinker 0.66s linear infinite;
-    animation-iteration-count: 2;
-}
-@keyframes blinker { /*the animation function */
-    50% {
-      opacity: 0.8;
-    }
+    animation: 0.8s linear ;
 }
 .winner-dialog {
     position: absolute;

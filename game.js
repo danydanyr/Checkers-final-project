@@ -45,7 +45,7 @@ function onCellClick(e) {
                             htmlTable.rows[i].cells[j].classList.add('highlightCorrectPieces');
                             setTimeout(() => {                                                          //flashing the cell/s to indicate the piece/s you need to move with (the piece/s that can eat)
                                 htmlTable.rows[i].cells[j].classList.remove('highlightCorrectPieces');
-                            }, 1300);
+                            }, 800);
                         }
                     }
                 }
@@ -154,6 +154,7 @@ function removeEatenPiece() {
 }
 function passTheTurn() {
     game.currentTurn = game.currentTurn === BLACK_PLAYER ? RED_PLAYER : BLACK_PLAYER;
+    document.body.style.backgroundColor = document.body.style.backgroundColor === 'black' ? 'rgb(131, 48, 48)' : 'black'; //also changes the background color
 }
 //checks if the piece reached the end of the board
 function isPieceQueen(row, col, color) {
