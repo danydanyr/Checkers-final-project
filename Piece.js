@@ -86,6 +86,45 @@ function onlyPossibleEat(row, col, color) {
         }
     }
 }
+//checks if the piece can eat in any direction (even backwards) after it ate a piece
+function multipleEatCheck(row, col, color) {
+    if (isPointInBounds(row + 1, col + 1) && pieces[row + 1][col + 1] !== undefined && pieces[row + 1][col + 1].color !== color && isPointInBounds(row + 2, col + 2) && pieces[row + 2][col + 2] === undefined) {
+        return true;
+    }
+    if (isPointInBounds(row + 1, col - 1) && pieces[row + 1][col - 1] !== undefined && pieces[row + 1][col - 1].color !== color && isPointInBounds(row + 2, col - 2) && pieces[row + 2][col - 2] === undefined) {
+        return true;
+    }
+
+    if (isPointInBounds(row - 1, col + 1) && pieces[row - 1][col + 1] !== undefined && pieces[row - 1][col + 1].color !== color && isPointInBounds(row - 2, col + 2) && pieces[row - 2][col + 2] === undefined) {
+        return true;
+    }
+    if (isPointInBounds(row - 1, col - 1) && pieces[row - 1][col - 1] !== undefined && pieces[row - 1][col - 1].color !== color && isPointInBounds(row - 2, col - 2) && pieces[row - 2][col - 2] === undefined) {
+        return true;
+    }
+    return false;
+}
+//and if it can eat it paints the possible eat
+function multipleEatPaint(row, col, color) {
+    if (isPointInBounds(row + 1, col + 1) && pieces[row + 1][col + 1] !== undefined && pieces[row + 1][col + 1].color !== color && isPointInBounds(row + 2, col + 2) && pieces[row + 2][col + 2] === undefined) {
+        paintPossibleEat(row + 1, col + 1);
+        paintPossibleAfterEat(row + 2, col + 2);
+    }
+    if (isPointInBounds(row + 1, col - 1) && pieces[row + 1][col - 1] !== undefined && pieces[row + 1][col - 1].color !== color && isPointInBounds(row + 2, col - 2) && pieces[row + 2][col - 2] === undefined) {
+        paintPossibleEat(row + 1, col - 1);
+        paintPossibleAfterEat(row + 2, col - 2);
+    }
+
+    if (isPointInBounds(row - 1, col + 1) && pieces[row - 1][col + 1] !== undefined && pieces[row - 1][col + 1].color !== color && isPointInBounds(row - 2, col + 2) && pieces[row - 2][col + 2] === undefined) {
+        paintPossibleEat(row - 1, col + 1);
+        paintPossibleAfterEat(row - 2, col + 2);
+    }
+    if (isPointInBounds(row - 1, col - 1) && pieces[row - 1][col - 1] !== undefined && pieces[row - 1][col - 1].color !== color && isPointInBounds(row - 2, col - 2) && pieces[row - 2][col - 2] === undefined) {
+        paintPossibleEat(row - 1, col - 1);
+        paintPossibleAfterEat(row - 2, col - 2);
+    }
+}
+
+
 function paintPossibleMove(row, col) {
     htmlTable.rows[row].cells[col].classList.add('possibleMove');
 }

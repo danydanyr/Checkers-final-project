@@ -104,9 +104,9 @@ function onCellClick(e) {
         unpaintAllCells();
         game.currentTurn === RED_PLAYER ? game.blackEaten++ : game.redEaten++; //keeps count of the amount of eaten pieces for each color 
         //checks if there is another possible
-        if (checkPossibleEat(row, col, pieces[row][col].color)) {
+        if (multipleEatCheck(row, col, pieces[row][col].color)) {
             pieceJustAte = true;
-            onlyPossibleEat(row, col, pieces[row][col].color);
+            multipleEatPaint(row, col, pieces[row][col].color);
             selectedPieceCell = selectedCell;
             return;
         }
