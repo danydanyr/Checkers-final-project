@@ -1,9 +1,5 @@
-class Queen {
-    constructor(color) {
-        this.color = color;
-        this.isQueen = true; //can't find another way to check if the piece is a queen
-    }
-}
+
+//all functions works so that x and y indicate the direction/diagonal that the queen can move in, and the functions check a different direction/diagonal every for-run
 function QueenMovement(row, col, color) {
     let x, y;
     for (let i = 0; i < queenXArray.length; i++) {
@@ -20,6 +16,7 @@ function QueenMovement(row, col, color) {
         }
     }
 }
+//this function excists to check if the queen (as well as the rest of the pieces in the same color) can move in order to identify if the game has ended (when none of the pieces can move)
 function QueenCheckMove(row, col, color) {
     let x, y;
     for (let i = 0; i < queenXArray.length; i++) {
@@ -37,6 +34,7 @@ function QueenCheckMove(row, col, color) {
     }
     return false;
 }
+//even if the piece can move a different direction, the piece HAS to eat
 function QueenOnlyEat(row, col, color) {
     let x, y;
     for (let i = 0; i < queenXArray.length; i++) {
@@ -60,6 +58,7 @@ function QueenOnlyEat(row, col, color) {
         }
     }
 }
+//to check if any of the pieces on the board can eat
 function QueenPossibleEat(row, col, color) {
     let x, y;
     for (let i = 0; i < queenXArray.length; i++) {

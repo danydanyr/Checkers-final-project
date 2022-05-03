@@ -43,6 +43,7 @@ function checkPossibleMove(row, col, color) {
     }
     return false;
 }
+//to check if any of the pieces on the board can eat
 function checkPossibleEat(row, col, color) {
     if (color === BLACK_PLAYER) {
         if (isPointInBounds(row + 1, col + 1) && pieces[row + 1][col + 1] !== undefined && pieces[row + 1][col + 1].color !== color && isPointInBounds(row + 2, col + 2) && pieces[row + 2][col + 2] === undefined) {
@@ -62,6 +63,7 @@ function checkPossibleEat(row, col, color) {
     }
     return false;
 }
+//even if the piece can move a different direction, the piece HAS to eat
 function onlyPossibleEat(row, col, color) {
     if (color === BLACK_PLAYER) {
         if (isPointInBounds(row + 1, col + 1) && pieces[row + 1][col + 1] !== undefined && pieces[row + 1][col + 1].color !== color && isPointInBounds(row + 2, col + 2) && pieces[row + 2][col + 2] === undefined) {
