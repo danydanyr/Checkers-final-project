@@ -5,6 +5,7 @@ let pieces = [];
 let currentPiece;
 let anotherPieceCanEat = false;
 let gameOver = false;
+let pieceJustAte = false;
 const htmlTable = document.createElement('table');
 const TABLE_SIZE = 8;
 const RED_PLAYER = 'red';
@@ -99,20 +100,29 @@ function onCellClick(e) {
         if (currentPiece.isQueen)
             selectedCell.classList.add('addQueen');
         pieces[row][col] = currentPiece;
-        isPieceQueen(e.currentTarget.parentNode.rowIndex, e.currentTarget.cellIndex, currentPiece.color);
-        selectedPieceCell = undefined;
-        game.currentTurn === RED_PLAYER ? game.blackEaten++ : game.redEaten++; //keeps count of the amount of eaten pieces for each color 
         removeEatenPiece();
         unpaintAllCells();
+        game.currentTurn === RED_PLAYER ? game.blackEaten++ : game.redEaten++; //keeps count of the amount of eaten pieces for each color 
+        //checks if there is another possible
+        if (checkPossibleEat(row, col, pieces[row][col].color)) {
+            pieceJustAte = true;
+            onlyPossibleEat(row, col, pieces[row][col].color);
+            selectedPieceCell = selectedCell;
+            return;
+        }
+
+        isPieceQueen(e.currentTarget.parentNode.rowIndex, e.currentTarget.cellIndex, currentPiece.color);
+        selectedPieceCell = undefined;
         if (isGameOver()) {
             gameover = true;
             if (didIWin())
                 return;
         }
+        pieceJustAte = false;
         passTheTurn();
     }
     //when clicking on another piece while one is alreay selected
-    else if (selectedPieceCell !== undefined) {
+    else if (selectedPieceCell !== undefined && !pieceJustAte) {
         unpaintAllCells();
         selectedPieceCell = undefined;
         onCellClick(e);
