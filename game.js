@@ -137,6 +137,7 @@ function unpaintAllCells() {
         }
     }
 }
+
 function removeEatenPiece(row, col) {
     let x, y;
     for (let i = 0; i < queenXArray.length; i++) {

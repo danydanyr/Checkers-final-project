@@ -35,7 +35,7 @@ function createInitialBoard() {
             if (htmlTable.rows[i].cells[j].classList.contains('white-cell')) {
                 pieces[i][j] = undefined;
             }
-            if (i === 3 || 4 || 5) {
+            if (i === 3 || 4 ) {
                 pieces[i][j] = undefined;
             }
         }
